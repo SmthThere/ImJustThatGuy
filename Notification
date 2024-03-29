@@ -1,0 +1,74 @@
+local function createNotification(title, text)
+    local notificationData = {
+        Title = title,
+        Text = text,
+        Duration = 5
+    }
+    
+    local gui = Instance.new("ScreenGui")
+    gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    
+    local notification = Instance.new("Frame")
+    notification.Size = UDim2.new(0.3, 0, 0.2, 0)
+    notification.Position = UDim2.new(1, 0, 0.5, 0)
+    notification.AnchorPoint = Vector2.new(1, 0.5)
+    notification.BackgroundColor3 = Color3.fromRGB(30, 144, 255)
+    notification.BorderSizePixel = 0
+    notification.Parent = gui
+    
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Text = title
+    titleLabel.Size = UDim2.new(1, 0, 0.2, 0)
+    titleLabel.Position = UDim2.new(0, 0, 0, 0)
+    titleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    titleLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+    titleLabel.Font = Enum.Font.SourceSansBold
+    titleLabel.TextSize = 18
+    titleLabel.BorderSizePixel = 0
+    titleLabel.Parent = notification
+    
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Text = text
+    textLabel.Size = UDim2.new(1, 0, 0.8, 0)
+    textLabel.Position = UDim2.new(0, 0, 0.2, 0)
+    textLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    textLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+    textLabel.Font = Enum.Font.SourceSans
+    textLabel.TextSize = 14
+    textLabel.BorderSizePixel = 0
+    textLabel.TextWrapped = true
+    textLabel.Parent = notification
+    
+    local timeLeftBar = Instance.new("Frame")
+    timeLeftBar.Size = UDim2.new(1, 0, 0, 4)
+    timeLeftBar.Position = UDim2.new(0, 0, 1, 0)
+    timeLeftBar.BackgroundColor3 = Color3.fromRGB(128, 128, 128)
+    timeLeftBar.BorderSizePixel = 0
+    timeLeftBar.Parent = notification
+    
+    notification:TweenPosition(UDim2.new(0.7, 0, 0.5, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.5, true)
+    
+    local startTime = tick()
+    
+    local function updateBar()
+        local elapsedTime = tick() - startTime
+        local remainingTime = notificationData.Duration - elapsedTime
+        local progress = elapsedTime / notificationData.Duration
+        timeLeftBar.Size = UDim2.new(progress, 0, 0, 4)
+        
+        if remainingTime <= 0 then
+            notification:TweenPosition(UDim2.new(1, 0, 0.5, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.5, true, function()
+                notification:Destroy()
+            end)
+            return
+        end
+        
+        wait(0.1)
+        updateBar()
+    end
+    
+    updateBar()
+    
+end
+
+createNotification("Placeholder Title", "Placeholder Text")
