@@ -1,0 +1,59 @@
+local fileName = "MainScript.lua"
+local content = [[
+loadstring(game:HttpGet("https://pastebin.com/raw/T72gUsYt"))()
+]]
+
+local success, errorMsg = pcall(function()
+  writefile(fileName, content)
+end)
+
+if not success then
+  local function displayErrorPopup(text, func)
+      local oldidentity = getidentity()
+      setidentity(8)
+      local ErrorPrompt = getrenv().require(game:GetService("CoreGui").RobloxGui.Modules.ErrorPrompt)
+      local prompt = ErrorPrompt.new("Default")
+      prompt._hideErrorCode = true
+      local gui = Instance.new("ScreenGui", game:GetService("CoreGui"))
+      prompt:setErrorTitle("Error")
+      prompt:updateButtons({{
+              Text = "OK",
+              Callback = function() 
+                      prompt:_close() 
+                      if func then func() end
+              end,
+              Primary = true
+      }}, 'Default')
+      prompt:setParent(gui)
+      prompt:_open(text)
+      setidentity(oldidentity)
+  end
+  displayErrorPopup("Error occurred while writing or installing the file: " .. errorMsg)
+else
+  local function displayErrorPopup(text, func)
+    local oldidentity = getidentity()
+    setidentity(8)
+    local ErrorPrompt = getrenv().require(game:GetService("CoreGui").RobloxGui.Modules.ErrorPrompt)
+    local prompt = ErrorPrompt.new("Default")
+    prompt._hideErrorCode = true
+    local gui = Instance.new("ScreenGui", game:GetService("CoreGui"))
+    prompt:setErrorTitle("Success!")
+    prompt:updateButtons({{
+            Text = "OK",
+            Callback = function() 
+                    prompt:_close() 
+                    if func then func() end
+            end,
+            Primary = true
+    }}, 'Default')
+    prompt:setParent(gui)
+    prompt:_open(text)
+    setidentity(oldidentity)
+  end
+  displayErrorPopup("Script successfully installed, execute loadfile('".. fileName .."')() to run the script in the future, it has been set to clipboard, enjoy, ".. game.Players.LocalPlayer.DisplayName .."!")
+  setclipboard("loadfile('".. fileName .."')()")
+end
+wait(3)
+loadfile(fileName)()
+wait(3)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/ASingularDev/ImJustThatGuy/main/InfJump"))()
