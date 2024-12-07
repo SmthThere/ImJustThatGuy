@@ -1,0 +1,60 @@
+local NothingLibrary = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Yumiara/Python/refs/heads/main/Python.py"))();
+local KeyGuardLibrary = loadstring(game:HttpGet("https://cdn.keyguardian.org/library/v1.0.0.lua"))()
+local trueData = "8333bed118994e6c8c4faae0eb39d4fb"
+local falseData = "b398c23e03524f99963d3a5b5269c8fa"
+
+KeyGuardLibrary.Set({
+  publicToken = "a21e97ec856b414fafd3fcba19384796",
+  privateToken = "5d99f948e10b4f729fb39eb5f420666c",
+  trueData = trueData,
+  falseData = falseData,
+})
+
+local key = "KEY_0b9d579dac6b4d81935c58ec456cf6e8"
+
+local getkey = KeyGuardLibrary.getLink()
+print(getkey)
+
+local response = KeyGuardLibrary.validateDefaultKey(key)
+print(response)
+
+-- Use a separate variable to track key validity
+local isValidKey = (response == trueData)
+
+if isValidKey then
+  print("Key is valid")
+else
+  print("Key is invalid")
+  return -- Stop execution if the key is invalid
+end
+
+-- Proceed with library setup only if the key is valid
+local Windows = NothingLibrary.new({
+  Title = "NOTHING",
+  Description = "Nothing UI Library",
+  Keybind = Enum.KeyCode.LeftControl,
+  Logo = 'http://www.roblox.com/asset/?id=18898582662'
+})
+
+local Notification = NothingLibrary.Notification();
+local TabFrame = Windows:NewTab({
+  Title = "Main",
+  Description = "Main",
+  Icon = "rbxassetid://7733960981"
+})
+local Section = TabFrame:NewSection({
+  Title = "Section",
+  Icon = "rbxassetid://7743869054",
+  Position = "Left"
+})
+
+Section:NewSlider({
+  Title = "Slider",
+  Min = 10,
+  Max = 50,
+  Default = 25,
+  Callback = function(a)
+      -- Walkspeed editor
+      game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = a  
+  end,
+})
